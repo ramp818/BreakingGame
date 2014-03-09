@@ -106,7 +106,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 //explosion = new SoundClip("sonidos/explosion.wav");
             
                 setBackground(Color.white);
-                setSize(1005,600);
+                setSize(1200,600);
                 addKeyListener(this);
                 
             

@@ -6,6 +6,8 @@
 
 package main.breaking.game;
 
+import javax.swing.JFrame;
+
 /**
  *
  * @author Pache
@@ -16,7 +18,9 @@ public class MainBreakingGame {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        BreakingGame juego = new BreakingGame();
+    	juego.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    	juego.setVisible(true);
     }
     
 }
