@@ -169,7 +169,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 setSize(1200,600);
                 addKeyListener(this);
                 cancion = new SoundClip("sounds/heisenberg.flv");
-                cancion.setLooping(true);
+                //cancion.setLooping(true);
                 cancion.play();
                 
             
