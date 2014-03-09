@@ -273,7 +273,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 */
         public void checaColision(){
             
-            /*if (policia.getPosX() + policia.getAncho() > getWidth()) {
+            if (policia.getPosX() + policia.getAncho() > getWidth()) {
                      policia.setPosX(getWidth()-policia.getAncho());
                 }
                  
@@ -288,7 +288,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                         movido = true;  
                 }
-                
+                /*
                 //Colision de la pelota con el applet
                 if (pelota.getPosX() + pelota.getAncho() > getWidth()) {
                     if(coliX){
@@ -351,22 +351,21 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             
             // Regresa la pelota si se sale del applet
 
-        if (pelota.getPosX() < 15) {
+        if (pelota.getPosX() < 0) {
             pelotaX = Math.abs(pelotaX);
         }
-        if (pelota.getPosX() + pelota.getAncho() > this.getWidth() - 15) {
+        if (pelota.getPosX() + pelota.getAncho() > this.getWidth()) {
             pelotaX = -Math.abs(pelotaX);
         }
-        if (pelota.getPosY() < 50) {
+        if (pelota.getPosY() < 0) {
             pelotaY = Math.abs(pelotaY);
         }
 
-        // Si la pelota se cae 
         if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
             gameOver = true; // Acabo el juego
         }
 
-        // Colision de pelota con la paleta
+        // Colision de pelota con la policia
         if (policia.getPerimetro().intersects(pelota.getPerimetro())) {
             int ca = (pelota.getPosX() + pelota.getAncho() / 2)
                     - (policia.getPosX() + policia.getAncho() / 2);
@@ -377,7 +376,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             pelotaY = (int) Math.ceil(20 * co / h);
         }
 
-        // Colision de la pelota con la meth
+        // Colision de la pelota con los bloques
         for (int i = 0; i < bloques.size(); i++) {
             bloque = (Ladrillo) (bloques.get(i));
             if (pelota.intersecta(bloque)) {
@@ -393,7 +392,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         }
 
         // Acabo el juego
-        if (score == 32) {
+        if (score == 50) {
             gameOver = true;
         }
 
