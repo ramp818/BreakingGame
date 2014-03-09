@@ -48,8 +48,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private boolean click;
         private boolean sonido;
         private boolean movimiento;
-        private Animacion animPelota;
-        private Animacion animMario;
+        private Animacion animFB;
+        private Animacion animBM;
         private Animacion animBloque;
         private long tiempoActual;
 	private long tiempoInicial;
@@ -77,34 +77,27 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 sonido=true;
                 movido=false;
                 bloques=new LinkedList();
-                Image pelota0 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola1.png"));
-                Image pelota1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola2.png"));
-                Image pelota2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola3.png"));
-                Image pelota3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola4.png"));
+                Image fb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb1.png"));
+                Image fb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb2.png"));
+                Image fb3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb3.png"));
+                Image fb4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb4.png"));
+           
+                animFB= new Animacion();
+                animFB.sumaCuadro(fb1,100);
+                animFB.sumaCuadro(fb2,100);
+                animFB.sumaCuadro(fb3,100);
+                animFB.sumaCuadro(fb4,100);
             
-                animPelota= new Animacion();
-                animPelota.sumaCuadro(pelota0,100);
-                animPelota.sumaCuadro(pelota1,100);
-                animPelota.sumaCuadro(pelota2,100);
-                animPelota.sumaCuadro(pelota3,100);
+                Image BM1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.png"));
+                Image BM2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.png"));
+                Image BM3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm3.png"));
+                Image BM4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm4.png"));
             
-                Image mario0 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario0.png"));
-                Image mario1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario1.png"));
-                Image mario2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario2.png"));
-                Image mario3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario3.png"));
-                Image mario4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario4.png"));
-                Image mario5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario5.png"));
-                Image mario6 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Mario6.png"));
-            
-                animMario= new Animacion();
-                animMario.sumaCuadro(mario0,100);
-                animMario.sumaCuadro(mario1,100);
-                animMario.sumaCuadro(mario2,100);
-                animMario.sumaCuadro(mario3,100);
-                animMario.sumaCuadro(mario4,100);
-                animMario.sumaCuadro(mario5,100);
-                animMario.sumaCuadro(mario6,100);
-                
+                animBM= new Animacion();
+                animBM.sumaCuadro(BM1,100);
+                animBM.sumaCuadro(BM2,100);
+                animBM.sumaCuadro(BM3,100);
+                animBM.sumaCuadro(BM4,100);
                 policia=new Barra(400,500,animMario);
                 pelota= new Pelota(posXPelota,posYPelota,animPelota);
                 
