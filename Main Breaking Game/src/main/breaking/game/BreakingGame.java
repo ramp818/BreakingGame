@@ -272,7 +272,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
          * con las orillas del <code>JFrame</code>.
          */
         public void checaColision(){
-           
+
             if (policia.getPosX() + policia.getAncho() > getWidth()) {
                      policia.setPosX(getWidth()-policia.getAncho());
                 }
@@ -350,7 +350,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }*/
            
             // Regresa la pelota si se sale del applet
- 
+
         if (pelota.getPosX() < 0) {
             pelotaX = Math.abs(pelotaX);
         }
@@ -360,10 +360,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         if (pelota.getPosY() < 0) {
             pelotaY = Math.abs(pelotaY);
         }
+
         if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
             gameOver = true; // Acabo el juego
         }
- 
+
+
+        if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
+            gameOver = true; // Acabo el juego
+        }
+
         // Colision de pelota con la policia
         if (policia.getPerimetro().intersects(pelota.getPerimetro())) {
             int ca = (pelota.getPosX() + pelota.getAncho() / 2)
@@ -374,7 +380,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             pelotaX = (int) Math.ceil(20 * ca / h);
             pelotaY = (int) Math.ceil(20 * co / h);
         }
- 
+
         // Colision de la pelota con los bloques
         for (int i = 0; i < bloques.size(); i++) {
             bloque = (Ladrillo) (bloques.get(i));
