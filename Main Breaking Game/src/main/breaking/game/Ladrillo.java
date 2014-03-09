@@ -1,6 +1,6 @@
 package main.breaking.game;
 
-
+import java.awt.Rectangle;
 public class Ladrillo extends Base{
     
         /**
@@ -14,4 +14,12 @@ public class Ladrillo extends Base{
 		super(posX,posY,image);	
 	}
     
+    public Rectangle arriba() {
+        return (new Rectangle(this.getPosX() + 19, this.getPosY(),this.getAncho() - 19, 20));
+    }
+    
+    public Rectangle abajo() {
+        return (new Rectangle(this.getPosX() + 19, this.getPosY() + this.getAlto() - 20, this.getAncho() - 19, 20));
+    }
+
 }

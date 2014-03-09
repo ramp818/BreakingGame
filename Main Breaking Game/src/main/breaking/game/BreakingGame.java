@@ -43,8 +43,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private boolean movido;
         private int velocidad;
         private int gravedad;
-        private int vX;
-        private int vY;
+        private int pelotaX;
+        private int pelotaY;
         private boolean click;
         private boolean sonido;
         private boolean movimiento;
@@ -63,6 +63,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private String nombreArchivo;
         private LinkedList bloques;
         private boolean coli=false;
+        private Image fondo1;
         
         public BreakingGame(){
             
@@ -80,6 +81,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 sonido=true;
                 movido=false;
                 bloques=new LinkedList();
+                
+                fondo1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/desierto.jpg"));
                 
                 Image fb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb1.gif"));
                 Image fb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb2.gif"));
@@ -141,7 +144,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }
             
                 setBackground(Color.white);
-                setSize(1200,1000);
+                setSize(1200,600);
                 addKeyListener(this);
                 
             
@@ -232,19 +235,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
            
                 //Colision entre objetos policia-pelota
                 if (policia.intersecta(pelota)) {
-                        vX = (int)(Math.random() * 5 + 13); 
-                        vY = (int)(Math.random() * 12 + 15); 
+                        
                         //pelota.setVelocidadY(vY);
                         puntos += 2; 
-                        click = false;
                         movido = true;
                         coli=true;
                 }
                 
                 //Colision de la pelota con el applet
                 if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
-                    vX = (int)(Math.random() * 5 + 13);
-                    vY = (int)(Math.random() * 12 + 15);
+                    
                     pelota.setPosX(50);
                     pelota.setPosY(450);
                     //pelota.setVelocidadY(vY);
@@ -256,7 +256,26 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     bolaPerdida=0;
                     }
                 }
-              }
+                
+                if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
+                        gameOver = true; // Acabo el juego
+                }
+
+
+                // Colision de la pelota con la meth
+                for (int i = 0; i < bloques.size(); i++) {
+                        bloque = (Ladrillo) (bloques.get(i));
+                    if (pelota.intersecta(bloque)) {
+                    if (bloque.arriba().intersects(pelota.getPerimetro()) || bloque.abajo().intersects(pelota.getPerimetro())) {
+                            pelotaY *= -1;
+                    } else {
+                        pelotaX *= -1;
+                    }
+               
+                    bloques.remove(i);
+                    }
+                }   
+        }
       
         /**
 	 * Metodo <I>paint</I> sobrescrito de la clase <code>JFrame</code>,
@@ -292,7 +311,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 */
 	public void paint1(Graphics g) {
                     
-        
+            g.drawImage(fondo1, 0, 0, this);
+          
             if (policia.getAnimacion() != null) {
                 g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(), policia.getPosY(), this);
             }
@@ -309,8 +329,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             //g.drawImage(imagenGO, 0 ,0, this);
             }
             
-            }
-       
+        } 
       /**
      * Metodo <I>keyPressed</I> sobrescrito de la interface
      * <code>KeyListener</code>.<P>
