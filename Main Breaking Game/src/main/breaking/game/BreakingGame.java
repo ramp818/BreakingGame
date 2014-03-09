@@ -35,10 +35,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	private Pelota pelota;    // Objeto de la clase Lanzado
 	private Barra policia; //Objeto de la clase Atrapador
         private Ladrillo camion;
-	private boolean choco;
+	private boolean gameOver;
         private boolean colision;
         private boolean pausa;
-        private boolean instrucciones;
+        private boolean inicio;
         private boolean movido;
         private int velocidad;
         private int gravedad;
@@ -64,7 +64,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 bolaPerdida=0;
                 pausa=false;
                 movimiento=false;
-                instrucciones=false;
+                inicio=false;
                 nombreArchivo="Juego.txt";
                 posXPelota=50;
                 posYPelota=450;
@@ -129,8 +129,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 		
             tiempoActual = System.currentTimeMillis();
             while (true) {
-			actualiza();
+		if(!pausa && inicio && !gameOver){
+                        actualiza();
 			checaColision();
+                        }
 			repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
 			try	{
 				// El thread se duerme.
@@ -303,25 +305,6 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 
-                if(instrucciones){
-                            if(policia != null && pelota != null){
-                                     //Dibuja la imagen en la posicion actualizada, dibuja el puntaje 
-                                     //y despliega la imagen al terminar el juego
-                                     g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(),policia.getPosY(), this);
-                                     g.drawImage(pelota.getAnimacion().getImagen(), pelota.getPosX(), pelota.getPosY(), this);
-                                     g.setColor(Color.black);
-                                     g.drawString("Puntos: " + puntos, 30, 50);
-                                     g.drawString("Vidas: " + vidas, 30,65);
-                                     g.drawString("ATRAPA LA PELOTA!!!\n",400,200);
-                                     g.drawString("I: Mostrar/Quitar las instrucciones del juego\n",370,220);
-                                     g.drawString("P: Pausar/Despausar el juego\n",370,240);
-                            }
-                            else {
-
-                            //Da un mensaje mientras se carga el dibujo
-                            g.drawString("No se cargo la imagen..",20,20);
-                        }
-               }
                if(vidas<=0){
                   
                   g.setColor(Color.black);
@@ -356,9 +339,9 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                 pausa=!pausa;
             }
-            else if(e.getKeyCode() == KeyEvent.VK_S){
+            else if(e.getKeyCode() == KeyEvent.VK_ENTER){
                 
-                instrucciones=!instrucciones;
+                inicio=true;
             }
         
     }
@@ -387,5 +370,6 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
     
     public void keyReleased(KeyEvent e) {
         direccion=0;
+        movimiento=false;
     }
 }
