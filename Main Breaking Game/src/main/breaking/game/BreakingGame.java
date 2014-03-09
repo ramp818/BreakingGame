@@ -220,7 +220,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 }
-            
+                pelota.setPosX(pelota.getPosX() - 3);
+                pelota.setPosY(pelota.getPosY() - 3);
                 if(coliX){
                    pelota.setPosX(pelota.getPosX() - 3);
                    pelota.setPosY(pelota.getPosY() + 3);
