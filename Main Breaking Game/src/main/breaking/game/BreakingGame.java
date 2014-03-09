@@ -46,6 +46,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private int vY;
         private boolean click;
         private boolean sonido;
+        private boolean movimiento;
         private Animacion animPelota;
         private Animacion animMario;
         private long tiempoActual;
@@ -62,6 +63,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 vidas=5;
                 bolaPerdida=0;
                 pausa=false;
+                movimiento=false;
                 instrucciones=false;
                 nombreArchivo="Juego.txt";
                 posXPelota=50;
@@ -100,7 +102,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animMario.sumaCuadro(mario6,100);
                 
                 policia=new Barra(400,500,animMario);
-                pelota= new Pelota(posXPelota,posYPelota,animPelota, vX, vY);
+                pelota= new Pelota(posXPelota,posYPelota,animPelota);
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
@@ -158,7 +160,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                  //Guarda el tiempo actual
                 tiempoActual += tiempoTranscurrido;
                  //Actualiza la animación con base en el tiempo transcurrido para cada malo
-                 if (click) {
+                 if (movimiento) {
                      animPelota.actualiza(tiempoTranscurrido);
                  }
                 tiempoActual += tiempoTranscurrido;
@@ -176,7 +178,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 }
-            if (click) { // si click es true hara movimiento parabolico
+            if (movimiento) { // si movimiento es true se mueve
              pelota.setPosX(pelota.getPosX() + pelota.getVelocidadX());
              pelota.setPosY(pelota.getPosY() - pelota.getVelocidadY());
              pelota.setVelocidadY(pelota.getVelocidadY() - gravedad);
@@ -343,22 +345,20 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             if (e.getKeyCode() == KeyEvent.VK_RIGHT) {    //Presiono flecha derecha
                 
                 direccion = 1;
+                movimiento=true;
             } 
             else if (e.getKeyCode() == KeyEvent.VK_LEFT) {    //Presiono tecla A izquierda
                 
                 direccion = 2;
+                movimiento=true;
             }
             else if (e.getKeyCode() == KeyEvent.VK_P){
                 
                 pausa=!pausa;
             }
-            else if(e.getKeyCode() == KeyEvent.VK_I){
-                
-                instrucciones=!instrucciones;
-            }
             else if(e.getKeyCode() == KeyEvent.VK_S){
                 
-                sonido=!sonido;
+                instrucciones=!instrucciones;
             }
         
     }
