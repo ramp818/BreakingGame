@@ -90,27 +90,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animFB.sumaCuadro(fb4,100);
                 
                 pelota= new Pelota(100,100,animFB);
-            
-                //Image BM1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.png"));
-                //Image BM2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.png"));
-                //Image BM3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm3.png"));
-                //Image BM4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm4.png"));
-            
-                //animBM= new Animacion();
-                //animBM.sumaCuadro(BM1,100);
-                //animBM.sumaCuadro(BM2,100);
-                //animBM.sumaCuadro(BM3,100);
-                //animBM.sumaCuadro(BM4,100);
                 
                 Image Barra1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/barra.png"));
                 
                 animBarra=new Animacion();
                 animBarra.sumaCuadro(Barra1,100);
-                policia=new Barra(400,300,animBarra);
+                policia=new Barra(100,500,animBarra);
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
-                Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.jpg"));
+                Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.png"));
                 animBloque= new Animacion();
                 animBloque.sumaCuadro(Bloques1,100);
                 
@@ -195,25 +184,15 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 * Metodo usado para checar las colisiones del objeto planeta y meteorito
 	 * con las orillas del <code>JFrame</code>.
 	 */
-        public void checaColision(){
-            
+        public void checaColision(){    
             if (policia.getPosX() + policia.getAncho() > getWidth()) {
                      policia.setPosX(getWidth()-policia.getAncho());
                 }
                  
-                if (policia.getPosX() < getWidth()) {
-			policia.setPosX(getWidth());
-		}
-                
-		if (policia.getPosY() + policia.getAlto() > getHeight()) {
-			policia.setPosY(getHeight()-policia.getAlto());
-		}
-                
-                if (policia.getPosY() < 0) {
-                     policia.setPosY(0);  
-                }
-                
-                
+                if (policia.getPosX() < 0) {
+			policia.setPosX(0);
+		}    
+           
                 //Colision entre objetos
                 if (policia.intersecta(pelota)) {
                         vX = (int)(Math.random() * 5 + 13); 
@@ -319,8 +298,6 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                     pausa=!pausa;
                 }
-            
-        
     }
 
     /**
