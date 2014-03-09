@@ -62,7 +62,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private int bolaPerdida;
         private String nombreArchivo;
         private LinkedList bloques;
-        private boolean coli=false;
+        private boolean coliX=false;
+        private boolean coliY=false;
         private Image fondo1;
         
         public BreakingGame(){
@@ -95,7 +96,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animFB.sumaCuadro(fb3,100);
                 animFB.sumaCuadro(fb4,100);
                 
-                pelota= new Pelota(400,350,animFB);
+                pelota= new Pelota(550,550,animFB);
                 
                 Image bm1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.gif"));
                 Image bm2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.gif"));
@@ -112,7 +113,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                 animBarra=new Animacion();
                 animBarra.sumaCuadro(Barra1,100);
-                policia=new Barra(100,500,animBarra);
+                policia=new Barra(100,550,animBarra);
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
@@ -210,13 +211,15 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }
                 }
             
-                if(coli){
-                   pelota.setPosX(pelota.getPosX() - 1);
-                   pelota.setPosY(pelota.getPosY() - 1);
-                }else{
-                    pelota.setPosX(pelota.getPosX() + 1);
-                    pelota.setPosY(pelota.getPosY() + 1);
+                if(coliX){
+                   pelota.setPosX(pelota.getPosX() - 3);
+                   pelota.setPosY(pelota.getPosY() + 3);
                 }
+                if(coliY){
+                    pelota.setPosX(pelota.getPosX() + 3);
+                    pelota.setPosY(pelota.getPosY() - 3);
+                }
+                
         }
         
         /**
@@ -239,23 +242,26 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                         //pelota.setVelocidadY(vY);
                         puntos += 2; 
                         movido = true;
-                        coli=true;
+                        coliY=!coliY;
                 }
                 
                 //Colision de la pelota con el applet
                 if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
-                    
-                    pelota.setPosX(50);
-                    pelota.setPosY(450);
-                    //pelota.setVelocidadY(vY);
-                    bolaPerdida++;
-                    click = false;
+                    coliY=!coliY;
                     movido = true;
-                    if(bolaPerdida==3){
-                    vidas-=1;
-                    bolaPerdida=0;
-                    }
                 }
+                if (pelota.getPosX() + pelota.getAncho() > getWidth()) {
+                     coliX=!coliX;
+                } 
+                if (pelota.getPosX() < 0) {
+			coliX=!coliX;
+		}   
+                if (pelota.getPosY() < 0) {
+			coliY=!coliY;
+		}   
+                
+                
+                
                 
                 if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
                         gameOver = true; // Acabo el juego
@@ -266,12 +272,12 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 for (int i = 0; i < bloques.size(); i++) {
                         bloque = (Ladrillo) (bloques.get(i));
                     if (pelota.intersecta(bloque)) {
+                        coliY=!coliY;
                     if (bloque.arriba().intersects(pelota.getPerimetro()) || bloque.abajo().intersects(pelota.getPerimetro())) {
                             pelotaY *= -1;
                     } else {
                         pelotaX *= -1;
                     }
-               
                     bloques.remove(i);
                     }
                 }   
