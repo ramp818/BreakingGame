@@ -60,6 +60,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private int bolaPerdida;
         private String nombreArchivo;
         private LinkedList bloques;
+        private boolean coli=false;
         
         public BreakingGame(){
             
@@ -89,7 +90,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animFB.sumaCuadro(fb3,100);
                 animFB.sumaCuadro(fb4,100);
                 
-                pelota= new Pelota(100,100,animFB);
+                pelota= new Pelota(400,350,animFB);
                 
                 Image Barra1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/barra.png"));
                 
@@ -175,16 +176,21 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }
                 }
             
-                
-                pelota.setPosX(pelota.getPosX() + 1);
-                pelota.setPosY(pelota.getPosY() + 1);
+                if(coli){
+                   pelota.setPosX(pelota.getPosX() - 1);
+                   pelota.setPosY(pelota.getPosY() - 1);
+                }else{
+                    pelota.setPosX(pelota.getPosX() + 1);
+                    pelota.setPosY(pelota.getPosY() + 1);
+                }
         }
         
         /**
 	 * Metodo usado para checar las colisiones del objeto planeta y meteorito
 	 * con las orillas del <code>JFrame</code>.
 	 */
-        public void checaColision(){    
+        public void checaColision(){
+            
             if (policia.getPosX() + policia.getAncho() > getWidth()) {
                      policia.setPosX(getWidth()-policia.getAncho());
                 }
@@ -193,17 +199,17 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 			policia.setPosX(0);
 		}    
            
-                //Colision entre objetos
+                //Colision entre objetos policia-pelota
                 if (policia.intersecta(pelota)) {
                         vX = (int)(Math.random() * 5 + 13); 
                         vY = (int)(Math.random() * 12 + 15); 
-                        pelota.setPosX(50);
-                        pelota.setPosY(450);
                         //pelota.setVelocidadY(vY);
                         puntos += 2; 
                         click = false;
                         movido = true;
+                        coli=true;
                 }
+                
                 //Colision de la pelota con el applet
                 if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
                     vX = (int)(Math.random() * 5 + 13);
