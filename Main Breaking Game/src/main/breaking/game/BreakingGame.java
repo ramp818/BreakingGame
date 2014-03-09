@@ -86,6 +86,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 posXPelota=50;
                 posYPelota=450;
                 score=0;
+                pelotaX=0;
+                pelotaY=4;
 
                 sonido=true;
                 movido=false;
@@ -108,7 +110,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animFB.sumaCuadro(fb3,100);
                 animFB.sumaCuadro(fb4,100);
                 
-                pelota= new Pelota(550,550,animFB);
+                //pelota= new Pelota(0,0,animFB);
+                //pelota.setPosX(policia.getPosX() + policia.getAncho() / 2 - pelota.getAncho() / 2);
+                //pelota.setPosY(policia.getPosY() - pelota.getAlto());
+
                 
                 Image bm1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.gif"));
                 Image bm2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.gif"));
@@ -125,7 +130,13 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                 animBarra=new Animacion();
                 animBarra.sumaCuadro(Barra1,100);
-                policia=new Barra(100,550,animBarra);
+                policia=new Barra(0,0,animBarra);
+                policia.setPosX(this.getWidth() / 2 - policia.getAncho() / 2);
+                policia.setPosY((this.getHeight() - policia.getAlto()) - 8);
+                
+                pelota= new Pelota(0,0,animFB);
+                pelota.setPosX(policia.getPosX() + policia.getAncho() / 2 - pelota.getAncho() / 2);
+                pelota.setPosY(policia.getPosY() - pelota.getAlto());
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
@@ -168,7 +179,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 setSize(1200,600);
                 addKeyListener(this);
                 cancion = new SoundClip("sounds/heisenberg.flv");
-                //cancion.setLooping(true);
+                cancion.setLooping(true);
                 cancion.play();
                 
             
@@ -233,7 +244,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 }
-                if(coliX==false && coliY==false){
+                /*if(coliX==false && coliY==false){
                     pelota.setPosX(pelota.getPosX() - 3);
                     pelota.setPosY(pelota.getPosY() - 3);
                 }
@@ -250,7 +261,9 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }else if(coliY){
                     pelota.setPosX(pelota.getPosX() - 3);
                     pelota.setPosY(pelota.getPosY() - 3);
-                }
+                }*/
+          pelota.setPosX(pelota.getPosX() + pelotaX);
+          pelota.setPosY(pelota.getPosY() + pelotaY);
                 
         }
         
@@ -260,7 +273,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 */
         public void checaColision(){
             
-            if (policia.getPosX() + policia.getAncho() > getWidth()) {
+            /*if (policia.getPosX() + policia.getAncho() > getWidth()) {
                      policia.setPosX(getWidth()-policia.getAncho());
                 }
                  
@@ -297,7 +310,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }else coliY=true;
                     coliX=false;
                         movido = true;
-		}   
+		}
+                if (pelota.getPosX() < 15) {
+                    pelotaX = Math.abs(pelotaX);
+                }
+                if (pelota.getPosX() + pelota.getAncho() > this.getWidth() - 15) {
+                    pelotaX = -Math.abs(pelotaX);
+                }
+                if (pelota.getPosY() < 50) {
+                    pelotaY = Math.abs(pelotaY);
+                }
                 
                 
                 
@@ -325,7 +347,56 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 
                     bloques.remove(i);
                     }
-                }   
+                }*/
+            
+            // Regresa la pelota si se sale del applet
+
+        if (pelota.getPosX() < 15) {
+            pelotaX = Math.abs(pelotaX);
+        }
+        if (pelota.getPosX() + pelota.getAncho() > this.getWidth() - 15) {
+            pelotaX = -Math.abs(pelotaX);
+        }
+        if (pelota.getPosY() < 50) {
+            pelotaY = Math.abs(pelotaY);
+        }
+
+        // Si la pelota se cae 
+        if (pelota.getPosY() + pelota.getAlto() - 35 > this.getHeight()) {
+            gameOver = true; // Acabo el juego
+        }
+
+        // Colision de pelota con la paleta
+        if (policia.getPerimetro().intersects(pelota.getPerimetro())) {
+            int ca = (pelota.getPosX() + pelota.getAncho() / 2)
+                    - (policia.getPosX() + policia.getAncho() / 2);
+            int co = (pelota.getPosY())
+                    - (policia.getPosY());
+            int h = (int) Math.sqrt(Math.pow(ca, 2) + Math.pow(co, 2));
+            pelotaX = (int) Math.ceil(20 * ca / h);
+            pelotaY = (int) Math.ceil(20 * co / h);
+        }
+
+        // Colision de la pelota con la meth
+        for (int i = 0; i < bloques.size(); i++) {
+            bloque = (Ladrillo) (bloques.get(i));
+            if (pelota.intersecta(bloque)) {
+                if (bloque.arriba().intersects(pelota.getPerimetro())
+                        || bloque.abajo().intersects(pelota.getPerimetro())) {
+                    pelotaY *= -1;
+                } else {
+                    pelotaX *= -1;
+                }
+                score++;
+                bloques.remove(i);
+            }
+        }
+
+        // Acabo el juego
+        if (score == 32) {
+            gameOver = true;
+        }
+
         }
       
         /**
