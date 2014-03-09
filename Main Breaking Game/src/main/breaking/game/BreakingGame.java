@@ -31,7 +31,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	private Image dbImage;	// Imagen a proyectar
         private Image gameover;
 	private Graphics dbg;	// Objeto grafico
-	//private SoundClip explosion;    // Objeto AudioClip
+	private SoundClip cancion;    // Objeto AudioClip
         //private SoundClip beep;
 	private Pelota pelota;    // Objeto de la clase Lanzado
 	private Barra policia; //Objeto de la clase Atrapador
@@ -157,6 +157,9 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 setBackground(Color.white);
                 setSize(1200,600);
                 addKeyListener(this);
+                cancion = new SoundClip("sounds/heisenberg.flv");
+                cancion.setLooping(true);
+                cancion.play();
                 
             
                 Thread th = new Thread (this);
