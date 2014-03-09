@@ -66,7 +66,6 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private LinkedList bloques;
         private boolean coliX=false;
         private boolean coliY=false;
-        private boolean coli=true;
         private Image fondo1;
         private Image fondo2;
         private Image fondo3;
@@ -234,21 +233,22 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 }
-                pelota.setPosX(pelota.getPosX() - 3);
-                pelota.setPosY(pelota.getPosY() - 3);
-                if(coliX){
-                   pelota.setPosX(pelota.getPosX() - 3);
-                   pelota.setPosY(pelota.getPosY() + 3);
+                if(coliX==false && coliY==false){
+                    pelota.setPosX(pelota.getPosX() - 3);
+                    pelota.setPosY(pelota.getPosY() - 3);
                 }
-                if(coli){
+                if (coliX){
+                   pelota.setPosX(pelota.getPosX() + 3);
+                   pelota.setPosY(pelota.getPosY() - 3);
+                }else if (coliX){
                    pelota.setPosX(pelota.getPosX() - 3);
                    pelota.setPosY(pelota.getPosY() - 3);
-                }else if (!coli){
-                   pelota.setPosX(pelota.getPosX() + 3);
-                   pelota.setPosY(pelota.getPosY() + 3);
                 }
                 if(coliY){
-                    pelota.setPosX(pelota.getPosX() + 3);
+                    pelota.setPosX(pelota.getPosX() - 3);
+                    pelota.setPosY(pelota.getPosY() + 3);
+                }else if(coliY){
+                    pelota.setPosX(pelota.getPosX() - 3);
                     pelota.setPosY(pelota.getPosY() - 3);
                 }
                 
@@ -270,28 +270,32 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
            
                 //Colision entre objetos policia-pelota
                 if (policia.intersecta(pelota)) {
-                        
-                        //pelota.setVelocidadY(vY);
-                        puntos += 2; 
-                        movido = true;
-                        coliX=!coliX;
+                    if(coliY){
+                        coliY=!coliY;
+                    }
+                        movido = true;  
                 }
                 
                 //Colision de la pelota con el applet
-                if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
-                    coli=!coli;
-                    movido = true;
-                }
                 if (pelota.getPosX() + pelota.getAncho() > getWidth()) {
-                     coli=!coli;
+                    if(coliX){
+                       coliX=!coliX;
+                    }else coliX=true;
+                     coliY=false;
                      movido = true;
                 } 
                 if (pelota.getPosX() < 0) {
-			coli=!coli;
+                    if(coliX){
+                       coliX=!coliX;
+                    }else coliX=true;
+                    coliY=false;
                         movido = true;
 		}   
                 if (pelota.getPosY() < 0) {
-			coli=!coli;
+                    if(coliY){
+                       coliY=!coliY;
+                    }else coliY=true;
+                    coliX=false;
                         movido = true;
 		}   
                 
@@ -307,7 +311,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 for (int i = 0; i < bloques.size(); i++) {
                         bloque = (Ladrillo) (bloques.get(i));
                     if (pelota.intersecta(bloque)) {
-                        coliX=!coliX;
+                        if(coliY){
+                       coliY=!coliY;
+                    }else coliY=true;
+                    coliX=false;
                     if (bloque.arriba().intersects(pelota.getPerimetro()) || bloque.abajo().intersects(pelota.getPerimetro())) {
                             pelotaY *= -1;
                     } else {
