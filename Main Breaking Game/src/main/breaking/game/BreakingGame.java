@@ -50,7 +50,9 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private boolean movimiento;
         private Animacion animFB;
         private Animacion animBM;
-        private Animacion animBloque;
+        private Animacion animBloque1;
+        private Animacion animBloque2;
+        private Animacion animBloque3;
         private Animacion animBarra;
         private long tiempoActual;
 	private long tiempoInicial;
@@ -92,6 +94,17 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                 pelota= new Pelota(400,350,animFB);
                 
+                Image bm1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.gif"));
+                Image bm2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.gif"));
+                Image bm3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm3.gif"));
+                Image bm4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm4.gif"));
+                
+                animBM= new Animacion();
+                animBM.sumaCuadro(bm1,100);
+                animBM.sumaCuadro(bm2,100);
+                animBM.sumaCuadro(bm3,100);
+                animBM.sumaCuadro(bm4,100);
+                
                 Image Barra1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/barra.png"));
                 
                 animBarra=new Animacion();
@@ -101,12 +114,29 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
                 Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.png"));
-                animBloque= new Animacion();
-                animBloque.sumaCuadro(Bloques1,100);
+                Image Bloques2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/PHlogo.png"));
+                Image Bloques3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/VPlogo.png"));
+                animBloque1= new Animacion();
+                animBloque1.sumaCuadro(Bloques1,100);
+                animBloque2=new Animacion();
+                animBloque2.sumaCuadro(Bloques2,100);
+                animBloque3=new Animacion();
+                animBloque3.sumaCuadro(Bloques3,100);
                 
-                for (int i = 50; i < 236; i += 59){
-                    for (int j = 45; j < 1130; j += 150){
-                        bloques.add(new Ladrillo(j, i, animBloque));
+                for (int i = 150; i < 336; i += 59){
+                    for (int j = 15; j < 1130; j += 150){
+                        if(i==150){
+                            bloques.add(new Ladrillo(j, i, animBM));
+                            bloques.add(new Ladrillo(j+40, i, animBM));
+                            bloques.add(new Ladrillo(j+80, i, animBM));
+                        }else if(i==209){
+                            bloques.add(new Ladrillo(j, i, animBloque3));
+                        }else if(i==268){
+                            bloques.add(new Ladrillo(j, i, animBloque2));
+                        }else if (i==327){
+                            bloques.add(new Ladrillo(j, i, animBloque1));
+                        }
+                        
                     }
                 }
             
@@ -160,6 +190,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                  //Actualiza la animación con base en el tiempo transcurrido para cada malo
                 
                 animFB.actualiza(tiempoTranscurrido);
+                animBM.actualiza(tiempoTranscurrido);
                 tiempoActual += tiempoTranscurrido;
                 animBarra.actualiza(tiempoTranscurrido);
                 //animPelota.actualiza(tiempoTranscurrido);
