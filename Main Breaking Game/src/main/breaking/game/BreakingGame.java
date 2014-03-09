@@ -15,6 +15,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.LinkedList;
 
 public class BreakingGame extends JFrame implements Runnable, KeyListener
 {
@@ -34,7 +35,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         //private SoundClip beep;
 	private Pelota pelota;    // Objeto de la clase Lanzado
 	private Barra policia; //Objeto de la clase Atrapador
-        private Ladrillo camion;
+        private Ladrillo bloque;
 	private boolean gameOver;
         private boolean colision;
         private boolean pausa;
@@ -49,6 +50,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private boolean movimiento;
         private Animacion animPelota;
         private Animacion animMario;
+        private Animacion animBloque;
         private long tiempoActual;
 	private long tiempoInicial;
         private int ultDireccion;
@@ -56,6 +58,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private int move=0;
         private int bolaPerdida;
         private String nombreArchivo;
+        private LinkedList bloques;
         
         public BreakingGame(){
             
@@ -73,6 +76,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 vY = (int)(Math.random() * 12 + 15); //posiciones de velocidad y
                 sonido=true;
                 movido=false;
+                bloques=new LinkedList();
                 Image pelota0 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola1.png"));
                 Image pelota1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola2.png"));
                 Image pelota2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("imagenes/Bola3.png"));
@@ -106,6 +110,11 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
+                for (int i = 50; i < 236; i += 59){
+                    for (int j = 45; j < 1130; j += 150){
+                        bloques.add(new Ladrillo(j, i, animBloque));
+                    }
+                }
             
                 setBackground(Color.white);
                 setSize(1200,600);
@@ -152,10 +161,6 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         public void actualiza() {  
           if(!pausa){  
             if(vidas>0){
-                if (pelota.getPosX() != 50 || pelota.getPosY() != getHeight() - 100) {
-                     movido = false;
-                }
-         
                  //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
                 long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
          
@@ -181,9 +186,9 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }
                 }
             if (movimiento) { // si movimiento es true se mueve
-             pelota.setPosX(pelota.getPosX() + pelota.getVelocidadX());
-             pelota.setPosY(pelota.getPosY() - pelota.getVelocidadY());
-             pelota.setVelocidadY(pelota.getVelocidadY() - gravedad);
+                
+                pelota.setPosX(pelota.getPosX() + 1);
+                pelota.setPosY(pelota.getPosY() + 1);
          }
         }
        }
@@ -217,7 +222,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                         vY = (int)(Math.random() * 12 + 15); 
                         pelota.setPosX(50);
                         pelota.setPosY(450);
-                        pelota.setVelocidadY(vY);
+                        //pelota.setVelocidadY(vY);
                         puntos += 2; 
                         click = false;
                         movido = true;
@@ -228,7 +233,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     vY = (int)(Math.random() * 12 + 15);
                     pelota.setPosX(50);
                     pelota.setPosY(450);
-                    pelota.setVelocidadY(vY);
+                    //pelota.setVelocidadY(vY);
                     bolaPerdida++;
                     click = false;
                     movido = true;
@@ -273,47 +278,24 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 */
 	public void paint1(Graphics g) {
                     
-                    if(!pausa){
-                            if(policia != null && pelota != null){
-                                     //Dibuja la imagen en la posicion actualizada, dibuja el puntaje 
-                                     //y despliega la imagen al terminar el juego
-                                     g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(),policia.getPosY(), this);
-                                     g.drawImage(pelota.getAnimacion().getImagen(), pelota.getPosX(), pelota.getPosY(), this);
-                                     g.setColor(Color.black);
-                                     g.drawString("Puntos: " + puntos, 30, 50);
-                                     g.drawString("Vidas: " + vidas, 30,65);
-                            }
-                            else {
+        
+            if (policia.getAnimacion() != null) {
+                g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(), policia.getPosY(), this);
+            }
+            if (pelota.getAnimacion() != null) {
+                g.drawImage(pelota.getAnimacion().getImagen(), pelota.getPosX(), pelota.getPosY(), this);
+            }
 
-                            //Da un mensaje mientras se carga el dibujo
-                            g.drawString("No se cargo la imagen..",20,20);
-                        }
-                    }
-                    else{
-                        
-                       if(policia != null && pelota != null){
-                                     //Dibuja la imagen en la posicion actualizada, dibuja el puntaje 
-                                     //y despliega la imagen al terminar el juego
-                                     g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(),policia.getPosY(), this);
-                                     g.drawImage(pelota.getAnimacion().getImagen(), pelota.getPosX(), pelota.getPosY(), this);
-                                     
-                                     g.drawString("Puntos: " + puntos, 30, 50);
-                                     g.drawString("Vidas: " + vidas, 30,65);
-                                     g.setColor(Color.red);
-                                     g.drawString("PAUSA", 500, 350);
-                                    
-                    }
-                }
-                
-               if(vidas<=0){
-                  
-                  g.setColor(Color.black);
-                  g.drawString("Terminaste con puntos: " + puntos, 370, 300);
-                  g.drawString("MADE BY: Rubén Martínez y Ángel González",370,250);
-                  
-                  
-               }
-               }
+            for (int i = 0; i < bloques.size(); i++) {
+                bloque = (Ladrillo) (bloques.get(i));
+                    g.drawImage(bloque.getAnimacion().getImagen(), bloque.getPosX(), bloque.getPosY(), this);
+            }
+        
+            if (gameOver){
+            //g.drawImage(imagenGO, 0 ,0, this);
+            }
+            
+            }
        
       /**
      * Metodo <I>keyPressed</I> sobrescrito de la interface
