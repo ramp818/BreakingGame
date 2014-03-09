@@ -69,43 +69,48 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 pausa=false;
                 movimiento=false;
                 inicio=false;
+                gameOver=false;
                 nombreArchivo="Juego.txt";
                 posXPelota=50;
                 posYPelota=450;
-                gravedad = 1;
-                vX = (int)(Math.random() * 5 + 13); // posiciones de velocidad x
-                vY = (int)(Math.random() * 12 + 15); //posiciones de velocidad y
+
                 sonido=true;
                 movido=false;
                 bloques=new LinkedList();
-                Image fb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb1.png"));
-                Image fb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb2.png"));
-                Image fb3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb3.png"));
-                Image fb4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb4.png"));
+                
+                Image fb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb1.gif"));
+                Image fb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb2.gif"));
+                Image fb3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb3.gif"));
+                Image fb4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb4.gif"));
            
                 animFB= new Animacion();
                 animFB.sumaCuadro(fb1,100);
                 animFB.sumaCuadro(fb2,100);
                 animFB.sumaCuadro(fb3,100);
                 animFB.sumaCuadro(fb4,100);
+                
+                pelota= new Pelota(100,100,animFB);
             
-                Image BM1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.png"));
-                Image BM2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.png"));
-                Image BM3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm3.png"));
-                Image BM4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm4.png"));
+                //Image BM1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm1.png"));
+                //Image BM2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm2.png"));
+                //Image BM3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm3.png"));
+                //Image BM4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/bm4.png"));
             
-                animBM= new Animacion();
-                animBM.sumaCuadro(BM1,100);
-                animBM.sumaCuadro(BM2,100);
-                animBM.sumaCuadro(BM3,100);
-                animBM.sumaCuadro(BM4,100);
-                policia=new Barra(400,500,animBarra);
-                pelota= new Pelota(posXPelota,posYPelota,animFB);
+                //animBM= new Animacion();
+                //animBM.sumaCuadro(BM1,100);
+                //animBM.sumaCuadro(BM2,100);
+                //animBM.sumaCuadro(BM3,100);
+                //animBM.sumaCuadro(BM4,100);
+                
+                Image Barra1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/barra.png"));
+                
+                animBarra=new Animacion();
+                animBarra.sumaCuadro(Barra1,100);
+                policia=new Barra(400,300,animBarra);
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
-                Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.png"));
-                
+                Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.jpg"));
                 animBloque= new Animacion();
                 animBloque.sumaCuadro(Bloques1,100);
                 
@@ -116,7 +121,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 }
             
                 setBackground(Color.white);
-                setSize(1200,600);
+                setSize(1200,1000);
                 addKeyListener(this);
                 
             
@@ -133,24 +138,22 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
      * se repinta el <code>Applet</code> y luego manda a dormir el hilo.
      * 
      */
-        public void run () {
-		
+        public void run() {
             tiempoActual = System.currentTimeMillis();
             while (true) {
-		if(!pausa && inicio && !gameOver){
-                        actualiza();
-			checaColision();
-                        }
-			repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
-			try	{
-				// El thread se duerme.
-				Thread.sleep (20);
-			}
-			catch (InterruptedException ex)	{
-				System.out.println("Error en " + ex.toString());
-			}
-		}
-	}
+                if (!pausa && !gameOver) {
+                    checaColision();
+                    actualiza();
+            }
+                repaint();
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException ex) {
+                    System.out.println("Error en " + ex.toString());
+                }   
+            }
+        }
+
         
         /**
 	 * Metodo usado para actualizar la posicion de objetos planeta y meteorito.
@@ -159,18 +162,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         
         public void actualiza() {  
           if(!pausa){  
-            if(vidas>0){
                  //Determina el tiempo que ha transcurrido desde que el Applet inicio su ejecución
                 long tiempoTranscurrido = System.currentTimeMillis() - tiempoActual;
          
                  //Guarda el tiempo actual
                 tiempoActual += tiempoTranscurrido;
                  //Actualiza la animación con base en el tiempo transcurrido para cada malo
-                 if (movimiento) {
-                     animFB.actualiza(tiempoTranscurrido);
-                 }
+                
+                animFB.actualiza(tiempoTranscurrido);
                 tiempoActual += tiempoTranscurrido;
-                //anim.actualiza(tiempoTranscurrido);
+                animBarra.actualiza(tiempoTranscurrido);
                 //animPelota.actualiza(tiempoTranscurrido);
                 //Dependiendo de la direccion del bueno es hacia donde se mueve.
                 switch(direccion){
@@ -184,13 +185,11 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     }
                 }
                 }
-            if (movimiento) { // si movimiento es true se mueve
+            
                 
                 pelota.setPosX(pelota.getPosX() + 1);
                 pelota.setPosY(pelota.getPosY() + 1);
-         }
         }
-       }
         
         /**
 	 * Metodo usado para checar las colisiones del objeto planeta y meteorito
@@ -306,24 +305,21 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
      */
     public void keyPressed(KeyEvent e) {
         
-            if (e.getKeyCode() == KeyEvent.VK_RIGHT) {    //Presiono flecha derecha
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {    //Presiono flecha derecha
                 
-                direccion = 1;
-                movimiento=true;
-            } 
-            else if (e.getKeyCode() == KeyEvent.VK_LEFT) {    //Presiono tecla A izquierda
+                    direccion = 1;
+                    movimiento=true;
+                } 
+                else if (e.getKeyCode() == KeyEvent.VK_LEFT) {    //Presiono tecla A izquierda
                 
-                direccion = 2;
-                movimiento=true;
-            }
-            else if (e.getKeyCode() == KeyEvent.VK_P){
+                    direccion = 2;
+                    movimiento=true;
+                }
+                else if (e.getKeyCode() == KeyEvent.VK_P){
                 
-                pausa=!pausa;
-            }
-            else if(e.getKeyCode() == KeyEvent.VK_ENTER){
-                
-                inicio=true;
-            }
+                    pausa=!pausa;
+                }
+            
         
     }
 
