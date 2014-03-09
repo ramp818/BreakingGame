@@ -53,6 +53,8 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private Animacion animBloque1;
         private Animacion animBloque2;
         private Animacion animBloque3;
+        private Animacion animBloque4;
+        private Animacion animBloque5;
         private Animacion animBarra;
         private long tiempoActual;
 	private long tiempoInicial;
@@ -64,6 +66,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private LinkedList bloques;
         private boolean coliX=false;
         private boolean coliY=false;
+        private boolean coli=true;
         private Image fondo1;
         private Image fondo2;
         private Image fondo3;
@@ -130,27 +133,35 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.png"));
                 Image Bloques2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/PHlogo.png"));
                 Image Bloques3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/VPlogo.png"));
+                Image Bloques4 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/heisenberg.png"));
+                Image Bloques5 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/jesse.png"));
                 animBloque1= new Animacion();
                 animBloque1.sumaCuadro(Bloques1,100);
                 animBloque2=new Animacion();
                 animBloque2.sumaCuadro(Bloques2,100);
                 animBloque3=new Animacion();
                 animBloque3.sumaCuadro(Bloques3,100);
-                
-                for (int i = 150; i < 336; i += 59){
+                animBloque4=new Animacion();
+                animBloque4.sumaCuadro(Bloques4,100);
+                animBloque5=new Animacion();
+                animBloque5.sumaCuadro(Bloques5,100);
+                for (int i = 50; i < 350; i += 59){
                     for (int j = 15; j < 1130; j += 150){
-                        if(i==150){
+                        if(i==50){
+                            bloques.add(new Ladrillo(j, i, animBloque4));
+                            bloques.add(new Ladrillo(j+50, i, animBloque5));
+                            bloques.add(new Ladrillo(j+100, i, animBloque4));
+                        }else if(i==168){
                             bloques.add(new Ladrillo(j, i, animBM));
                             bloques.add(new Ladrillo(j+40, i, animBM));
                             bloques.add(new Ladrillo(j+80, i, animBM));
-                        }else if(i==209){
+                        }else if(i==227){
                             bloques.add(new Ladrillo(j, i, animBloque3));
-                        }else if(i==268){
+                        }else if (i==286){
                             bloques.add(new Ladrillo(j, i, animBloque2));
-                        }else if (i==327){
+                        }else if (i==345){
                             bloques.add(new Ladrillo(j, i, animBloque1));
                         }
-                        
                     }
                 }
             
@@ -229,6 +240,13 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                    pelota.setPosX(pelota.getPosX() - 3);
                    pelota.setPosY(pelota.getPosY() + 3);
                 }
+                if(coli){
+                   pelota.setPosX(pelota.getPosX() - 3);
+                   pelota.setPosY(pelota.getPosY() - 3);
+                }else if (!coli){
+                   pelota.setPosX(pelota.getPosX() + 3);
+                   pelota.setPosY(pelota.getPosY() + 3);
+                }
                 if(coliY){
                     pelota.setPosX(pelota.getPosX() + 3);
                     pelota.setPosY(pelota.getPosY() - 3);
@@ -256,22 +274,25 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                         //pelota.setVelocidadY(vY);
                         puntos += 2; 
                         movido = true;
-                        coliY=!coliY;
+                        coliX=!coliX;
                 }
                 
                 //Colision de la pelota con el applet
                 if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
-                    coliY=!coliY;
+                    coli=!coli;
                     movido = true;
                 }
                 if (pelota.getPosX() + pelota.getAncho() > getWidth()) {
-                     coliX=!coliX;
+                     coli=!coli;
+                     movido = true;
                 } 
                 if (pelota.getPosX() < 0) {
-			coliX=!coliX;
+			coli=!coli;
+                        movido = true;
 		}   
                 if (pelota.getPosY() < 0) {
-			coliY=!coliY;
+			coli=!coli;
+                        movido = true;
 		}   
                 
                 
@@ -286,7 +307,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 for (int i = 0; i < bloques.size(); i++) {
                         bloque = (Ladrillo) (bloques.get(i));
                     if (pelota.intersecta(bloque)) {
-                        coliY=!coliY;
+                        coliX=!coliX;
                     if (bloque.arriba().intersects(pelota.getPerimetro()) || bloque.abajo().intersects(pelota.getPerimetro())) {
                             pelotaY *= -1;
                     } else {
