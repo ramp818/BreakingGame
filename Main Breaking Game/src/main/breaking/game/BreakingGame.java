@@ -51,6 +51,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private Animacion animFB;
         private Animacion animBM;
         private Animacion animBloque;
+        private Animacion animBarra;
         private long tiempoActual;
 	private long tiempoInicial;
         private int ultDireccion;
@@ -98,11 +99,16 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 animBM.sumaCuadro(BM2,100);
                 animBM.sumaCuadro(BM3,100);
                 animBM.sumaCuadro(BM4,100);
-                policia=new Barra(400,500,animMario);
-                pelota= new Pelota(posXPelota,posYPelota,animPelota);
+                policia=new Barra(400,500,animBarra);
+                pelota= new Pelota(posXPelota,posYPelota,animFB);
                 
                 //beep = new SoundClip("sonidos/beep.wav");
                 //explosion = new SoundClip("sonidos/explosion.wav");
+                Image Bloques1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/RV.png"));
+                
+                animBloque= new Animacion();
+                animBloque.sumaCuadro(Bloques1,100);
+                
                 for (int i = 50; i < 236; i += 59){
                     for (int j = 45; j < 1130; j += 150){
                         bloques.add(new Ladrillo(j, i, animBloque));
@@ -161,10 +167,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 tiempoActual += tiempoTranscurrido;
                  //Actualiza la animación con base en el tiempo transcurrido para cada malo
                  if (movimiento) {
-                     animPelota.actualiza(tiempoTranscurrido);
+                     animFB.actualiza(tiempoTranscurrido);
                  }
                 tiempoActual += tiempoTranscurrido;
-                animMario.actualiza(tiempoTranscurrido);
+                //anim.actualiza(tiempoTranscurrido);
                 //animPelota.actualiza(tiempoTranscurrido);
                 //Dependiendo de la direccion del bueno es hacia donde se mueve.
                 switch(direccion){
