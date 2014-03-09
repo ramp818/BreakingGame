@@ -64,6 +64,11 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
         private LinkedList bloques;
         private boolean coli=false;
         private Image fondo1;
+        private Image fondo2;
+        private Image fondo3;
+        private Image fondo4;
+        private Image fondoGO;
+        private int score;
         
         public BreakingGame(){
             
@@ -77,12 +82,17 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                 nombreArchivo="Juego.txt";
                 posXPelota=50;
                 posYPelota=450;
+                score=0;
 
                 sonido=true;
                 movido=false;
                 bloques=new LinkedList();
                 
                 fondo1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/desierto.jpg"));
+                fondo2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/PH.jpg"));
+                fondo3 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/VP.jpg"));
+                fondo4 =  Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/heisenberg.jpg"));
+                fondoGO = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/intro.png"));
                 
                 Image fb1 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb1.gif"));
                 Image fb2 = Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("images/fb2.gif"));
@@ -271,7 +281,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
                     } else {
                         pelotaX *= -1;
                     }
-               
+                    score++;
                     bloques.remove(i);
                     }
                 }   
@@ -311,8 +321,10 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
 	 */
 	public void paint1(Graphics g) {
                     
-            g.drawImage(fondo1, 0, 0, this);
-          
+            if(score<=8)g.drawImage(fondo1, 0, 0, this);
+            if(score>8 && score<=16)g.drawImage(fondo2, 0, 0, this);
+            if(score>16 && score<=24)g.drawImage(fondo3, 0, 0, this);
+            if(score>24 && score<=50)g.drawImage(fondo4, 0, 0, this);
             if (policia.getAnimacion() != null) {
                 g.drawImage(policia.getAnimacion().getImagen(), policia.getPosX(), policia.getPosY(), this);
             }
@@ -326,7 +338,7 @@ public class BreakingGame extends JFrame implements Runnable, KeyListener
             }
         
             if (gameOver){
-            //g.drawImage(imagenGO, 0 ,0, this);
+            g.drawImage(fondoGO, 0 ,0, this);
             }
             
         } 
